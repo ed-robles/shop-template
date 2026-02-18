@@ -1,11 +1,17 @@
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import AuthPageClient, {
   type AuthPageInitialQueryState,
-  type AuthPageInitialSession,
 } from "./AuthPageClient";
 import { auth } from "@/lib/auth";
+import { StorefrontHeader } from "../StorefrontHeader";
 
 type AuthSearchParams = Record<string, string | string[] | undefined>;
+type SessionWithEmail = {
+  user?: {
+    email?: string | null;
+  } | null;
+} | null;
 
 function getFirstValue(value: string | string[] | undefined) {
   if (Array.isArray(value)) {
@@ -23,20 +29,29 @@ export default async function AuthPage({
   const resolvedSearchParams = (await searchParams) ?? {};
   const reqHeaders = await headers();
 
-  const initialSession = (await auth.api.getSession({
-    headers: reqHeaders,
-  })) as AuthPageInitialSession;
-
   const initialQueryState: AuthPageInitialQueryState = {
     token: getFirstValue(resolvedSearchParams.token),
     verified: getFirstValue(resolvedSearchParams.verified),
     error: getFirstValue(resolvedSearchParams.error),
   };
+  const session = (await auth.api.getSession({
+    headers: reqHeaders,
+  })) as SessionWithEmail;
+  const isSignedIn = Boolean(session?.user?.email);
+  const isAuthQueryFlow = Boolean(
+    initialQueryState.token ||
+      initialQueryState.verified ||
+      initialQueryState.error,
+  );
+
+  if (isSignedIn && !isAuthQueryFlow) {
+    redirect("/account");
+  }
 
   return (
-    <AuthPageClient
-      initialSession={initialSession}
-      initialQueryState={initialQueryState}
-    />
+    <>
+      <StorefrontHeader />
+      <AuthPageClient initialQueryState={initialQueryState} />
+    </>
   );
 }
