@@ -68,3 +68,34 @@ model Verification {
 
   @@index([identifier])
 }
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum ProductCategory {
+  TOPS
+  BOTTOMS
+  SHOES
+  ACCESSORIES
+}
+
+model Product {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  sku          String?       @unique
+  category     ProductCategory @default(TOPS)
+  description  String
+  priceInCents Int
+  imageKey     String
+  imageUrl     String
+  status       ProductStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+}
