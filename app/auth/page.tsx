@@ -4,7 +4,6 @@ import AuthPageClient, {
   type AuthPageInitialQueryState,
 } from "./AuthPageClient";
 import { auth } from "@/lib/auth";
-import { StorefrontHeader } from "../StorefrontHeader";
 
 type AuthSearchParams = Record<string, string | string[] | undefined>;
 type SessionWithEmail = {
@@ -48,10 +47,5 @@ export default async function AuthPage({
     redirect("/account");
   }
 
-  return (
-    <>
-      <StorefrontHeader />
-      <AuthPageClient initialQueryState={initialQueryState} />
-    </>
-  );
+  return <AuthPageClient initialQueryState={initialQueryState} />;
 }

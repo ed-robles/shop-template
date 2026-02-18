@@ -234,7 +234,6 @@ export default function AuthPageClient({
         return;
       }
 
-      setSuccessMessage("Signed in. Redirecting to account...");
       window.location.assign("/account");
     } catch {
       setErrorMessage("Authentication request failed.");
@@ -299,13 +298,12 @@ export default function AuthPageClient({
   return (
     <main className="min-h-screen bg-white px-4 py-12 text-black">
       <div className="mx-auto w-full max-w-md bg-white p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-xl font-semibold tracking-tight">Account access</h1>
+        <div className="mb-6 flex justify-center pb-4">
           <Link
             href="/"
-            className="text-xs font-medium uppercase tracking-wider text-black"
+            className="text-sm font-semibold uppercase tracking-[0.24em]"
           >
-            Home
+            Shop Template
           </Link>
         </div>
 
@@ -339,14 +337,20 @@ export default function AuthPageClient({
 
           <form className="space-y-3" onSubmit={handleEmailSubmit}>
             {isSignUp ? (
-              <input
-                type="text"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                placeholder="Full name"
-                autoComplete="name"
-                className="w-full rounded-none border border-black bg-white px-3 py-2.5 text-sm text-black outline-none ring-0 transition placeholder:text-black/50 focus:border-black"
-              />
+              <div className="space-y-1">
+                <label htmlFor="auth-name" className="block text-sm font-medium text-black">
+                  Full Name
+                </label>
+                <input
+                  id="auth-name"
+                  type="text"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  placeholder="name"
+                  autoComplete="name"
+                  className="w-full rounded-none border border-black bg-white px-3 py-2.5 text-sm text-black outline-none ring-0 transition placeholder:text-black/50 focus:border-black"
+                />
+              </div>
             ) : null}
 
             {!isResetPassword ? (
@@ -429,7 +433,7 @@ export default function AuthPageClient({
               type="submit"
               disabled={isSubmitting}
               className={`w-full px-4 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-70 ${
-                mode === "sign-in"
+                isAuthFlow
                   ? "border border-black bg-black text-white hover:bg-black/90"
                   : "border border-black bg-white text-black hover:bg-zinc-100"
               }`}
@@ -495,6 +499,27 @@ export default function AuthPageClient({
             {successMessage}
           </p>
         ) : null}
+
+        <Link
+          href="/"
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 bg-white px-4 py-2.5 text-sm font-medium text-black"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.9"
+            aria-hidden="true"
+            className="h-4 w-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M14.25 6.75 9 12l5.25 5.25M9 12h10.5"
+            />
+          </svg>
+          Back
+        </Link>
       </div>
     </main>
   );

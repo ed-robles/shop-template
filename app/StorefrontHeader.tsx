@@ -76,9 +76,12 @@ export function StorefrontHeader({
     <>
       <header className="bg-white">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-3">
-          <span className="text-sm font-semibold uppercase tracking-[0.24em]">
+          <Link
+            href="/"
+            className="text-sm font-semibold uppercase tracking-[0.24em]"
+          >
             Shop Template
-          </span>
+          </Link>
 
           <div className="flex items-center gap-2">
             <button
