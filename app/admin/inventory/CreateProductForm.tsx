@@ -29,6 +29,7 @@ export default function CreateProductForm() {
   const [slug, setSlug] = useState("");
   const [slugEdited, setSlugEdited] = useState(false);
   const [price, setPrice] = useState("");
+  const [stockQuantity, setStockQuantity] = useState("0");
   const [category, setCategory] = useState<ProductCategoryValue>("TOPS");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("PUBLISHED");
@@ -60,6 +61,7 @@ export default function CreateProductForm() {
     setSlug("");
     setSlugEdited(false);
     setPrice("");
+    setStockQuantity("0");
     setCategory("TOPS");
     setDescription("");
     setStatus("PUBLISHED");
@@ -89,6 +91,7 @@ export default function CreateProductForm() {
       formData.set("name", name);
       formData.set("slug", slug);
       formData.set("price", price);
+      formData.set("stockQuantity", stockQuantity);
       formData.set("category", category);
       formData.set("description", description);
       formData.set("status", status);
@@ -149,7 +152,7 @@ export default function CreateProductForm() {
         </label>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <label className="space-y-1">
           <span className="text-xs font-medium uppercase tracking-wider text-slate-600">
             Price (USD)
@@ -163,6 +166,22 @@ export default function CreateProductForm() {
             onChange={(event) => setPrice(event.target.value)}
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none ring-0 transition focus:border-slate-500"
             placeholder="89.00"
+          />
+        </label>
+
+        <label className="space-y-1">
+          <span className="text-xs font-medium uppercase tracking-wider text-slate-600">
+            Stock
+          </span>
+          <input
+            type="number"
+            min="0"
+            step="1"
+            required
+            value={stockQuantity}
+            onChange={(event) => setStockQuantity(event.target.value)}
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none ring-0 transition focus:border-slate-500"
+            placeholder="10"
           />
         </label>
 

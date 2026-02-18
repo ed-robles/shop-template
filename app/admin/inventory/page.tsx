@@ -59,6 +59,7 @@ export default async function AdminInventoryPage() {
                 category: product.category,
                 description: product.description,
                 priceInCents: product.priceInCents,
+                stockQuantity: product.stockQuantity,
                 imageUrl: product.imageUrl,
                 status: product.status,
               }))}

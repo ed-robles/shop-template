@@ -50,6 +50,19 @@ function parsePriceToCents(rawValue: string) {
   return Math.round(parsed * 100);
 }
 
+function parseStockQuantity(rawValue: string) {
+  if (!rawValue) {
+    return null;
+  }
+
+  const parsed = Number(rawValue);
+  if (!Number.isInteger(parsed) || parsed < 0) {
+    return null;
+  }
+
+  return parsed;
+}
+
 async function isAuthorizedAdmin(request: Request) {
   const session = (await auth.api.getSession({
     headers: request.headers,
@@ -100,6 +113,7 @@ export async function PATCH(
   const providedSlug = parseRequiredText(formData.get("slug"));
   const description = parseRequiredText(formData.get("description"));
   const price = parseRequiredText(formData.get("price"));
+  const stockQuantityRaw = parseRequiredText(formData.get("stockQuantity"));
   const categoryRaw = parseRequiredText(formData.get("category"));
   const statusRaw = parseRequiredText(formData.get("status"));
   const replacementImageKey = parseRequiredText(formData.get("replacementImageKey"));
@@ -120,6 +134,14 @@ export async function PATCH(
   if (priceInCents === null) {
     return NextResponse.json(
       { error: "Enter a valid price greater than 0." },
+      { status: 400 },
+    );
+  }
+
+  const stockQuantity = parseStockQuantity(stockQuantityRaw);
+  if (stockQuantity === null) {
+    return NextResponse.json(
+      { error: "Enter a valid stock quantity of 0 or greater." },
       { status: 400 },
     );
   }
@@ -194,6 +216,7 @@ export async function PATCH(
         category,
         description,
         priceInCents,
+        stockQuantity,
         status,
         imageKey: nextImageKey,
         imageUrl: nextImageUrl,

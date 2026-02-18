@@ -189,6 +189,15 @@ export default async function Home({
                 <p className="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
                   {PRODUCT_CATEGORY_LABELS[product.category]}
                 </p>
+                <p
+                  className={`mt-1 text-xs font-semibold uppercase tracking-wider ${
+                    product.stockQuantity > 0 ? "text-emerald-700" : "text-rose-600"
+                  }`}
+                >
+                  {product.stockQuantity > 0
+                    ? `In stock: ${product.stockQuantity}`
+                    : "Out of stock"}
+                </p>
                 <p className="mt-1 text-sm text-slate-700">
                   {formatPrice(product.priceInCents)}
                 </p>

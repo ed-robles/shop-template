@@ -51,6 +51,19 @@ function parsePriceToCents(rawValue: string) {
   return Math.round(parsed * 100);
 }
 
+function parseStockQuantity(rawValue: string) {
+  if (!rawValue) {
+    return null;
+  }
+
+  const parsed = Number(rawValue);
+  if (!Number.isInteger(parsed) || parsed < 0) {
+    return null;
+  }
+
+  return parsed;
+}
+
 function generateSixDigitSku() {
   return (Math.floor(Math.random() * 900000) + 100000).toString();
 }
@@ -135,6 +148,7 @@ export async function POST(request: Request) {
   const providedSlug = parseRequiredText(formData.get("slug"));
   const description = parseRequiredText(formData.get("description"));
   const price = parseRequiredText(formData.get("price"));
+  const stockQuantityRaw = parseRequiredText(formData.get("stockQuantity"));
   const categoryRaw = parseRequiredText(formData.get("category"));
   const statusRaw = parseRequiredText(formData.get("status"));
   const imageKeyInput = parseRequiredText(formData.get("imageKey"));
@@ -155,6 +169,14 @@ export async function POST(request: Request) {
   if (priceInCents === null) {
     return NextResponse.json(
       { error: "Enter a valid price greater than 0." },
+      { status: 400 },
+    );
+  }
+
+  const stockQuantity = parseStockQuantity(stockQuantityRaw);
+  if (stockQuantity === null) {
+    return NextResponse.json(
+      { error: "Enter a valid stock quantity of 0 or greater." },
       { status: 400 },
     );
   }
@@ -229,6 +251,7 @@ export async function POST(request: Request) {
           category,
           description,
           priceInCents,
+          stockQuantity,
           imageKey,
           imageUrl,
           status,

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { CartProvider } from "@/lib/cart-client";
 
 export const metadata: Metadata = {
   title: "E-Commerce Template",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );

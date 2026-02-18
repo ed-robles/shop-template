@@ -3,6 +3,8 @@ import { ProductStatus } from "@prisma/client";
 import { notFound } from "next/navigation";
 import { PRODUCT_CATEGORY_LABELS } from "@/lib/product-categories";
 import { prisma } from "@/lib/prisma";
+import { StorefrontHeader } from "@/app/StorefrontHeader";
+import AddToCartSection from "./AddToCartSection";
 
 export const dynamic = "force-dynamic";
 
@@ -32,41 +34,62 @@ export default async function ProductPage({
     notFound();
   }
 
+  const isOutOfStock = product.stockQuantity <= 0;
+
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-10 text-slate-900">
-      <div className="mx-auto w-full max-w-5xl">
-        <Link
-          href="/"
-          className="text-xs font-medium uppercase tracking-wider text-slate-500 hover:text-slate-900"
-        >
-          Back to shop
-        </Link>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <StorefrontHeader />
+      <main className="px-4 py-10">
+        <div className="mx-auto w-full max-w-5xl">
+          <Link
+            href="/"
+            className="text-xs font-medium uppercase tracking-wider text-slate-500 hover:text-slate-900"
+          >
+            Back to shop
+          </Link>
 
-        <article className="mt-4 grid gap-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-2 md:p-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="h-full max-h-[560px] w-full rounded-xl object-cover"
-          />
+          <article className="mt-4 grid gap-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-2 md:p-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="h-full max-h-[560px] w-full rounded-xl object-cover"
+            />
 
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight">{product.name}</h1>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-              SKU {product.sku || "pending"}
-            </p>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-              {PRODUCT_CATEGORY_LABELS[product.category]}
-            </p>
-            <p className="mt-2 text-xl font-medium text-slate-800">
-              {formatPrice(product.priceInCents)}
-            </p>
-            <p className="mt-6 whitespace-pre-line text-sm leading-6 text-slate-700">
-              {product.description}
-            </p>
-          </div>
-        </article>
-      </div>
-    </main>
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight">{product.name}</h1>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                SKU {product.sku || "pending"}
+              </p>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                {PRODUCT_CATEGORY_LABELS[product.category]}
+              </p>
+              <p className="mt-2 text-xl font-medium text-slate-800">
+                {formatPrice(product.priceInCents)}
+              </p>
+              <p
+                className={`mt-2 text-xs font-semibold uppercase tracking-[0.2em] ${
+                  isOutOfStock ? "text-rose-600" : "text-emerald-700"
+                }`}
+              >
+                {isOutOfStock ? "Out of stock" : `In stock: ${product.stockQuantity}`}
+              </p>
+              <p className="mt-6 whitespace-pre-line text-sm leading-6 text-slate-700">
+                {product.description}
+              </p>
+
+              <AddToCartSection
+                productId={product.id}
+                slug={product.slug}
+                name={product.name}
+                imageUrl={product.imageUrl}
+                priceInCents={product.priceInCents}
+                stockQuantity={product.stockQuantity}
+              />
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
   );
 }

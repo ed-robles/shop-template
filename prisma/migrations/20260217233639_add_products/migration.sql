@@ -6,6 +6,7 @@ CREATE TABLE "Product" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
+    "sku" TEXT,
     "description" TEXT NOT NULL,
     "priceInCents" INTEGER NOT NULL,
     "imageKey" TEXT NOT NULL,
@@ -19,6 +20,9 @@ CREATE TABLE "Product" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Product_slug_key" ON "Product"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Product_sku_key" ON "Product"("sku");
 
 -- CreateIndex
 CREATE INDEX "Product_status_idx" ON "Product"("status");

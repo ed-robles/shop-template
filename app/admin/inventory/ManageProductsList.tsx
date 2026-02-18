@@ -20,6 +20,7 @@ type InventoryProduct = {
   category: ProductCategoryValue;
   description: string;
   priceInCents: number;
+  stockQuantity: number;
   imageUrl: string;
   status: ProductStatus;
 };
@@ -59,6 +60,9 @@ function ProductCard({ product }: { product: InventoryProduct }) {
   const [slug, setSlug] = useState(product.slug);
   const [slugEdited, setSlugEdited] = useState(false);
   const [price, setPrice] = useState((product.priceInCents / 100).toFixed(2));
+  const [stockQuantity, setStockQuantity] = useState(
+    product.stockQuantity.toString(),
+  );
   const [category, setCategory] = useState<ProductCategoryValue>(product.category);
   const [description, setDescription] = useState(product.description);
   const [status, setStatus] = useState<ProductStatus>(product.status);
@@ -92,6 +96,7 @@ function ProductCard({ product }: { product: InventoryProduct }) {
       formData.set("name", name);
       formData.set("slug", slug);
       formData.set("price", price);
+      formData.set("stockQuantity", stockQuantity);
       formData.set("category", category);
       formData.set("description", description);
       formData.set("status", status);
@@ -167,6 +172,7 @@ function ProductCard({ product }: { product: InventoryProduct }) {
     setSlug(product.slug);
     setSlugEdited(false);
     setPrice((product.priceInCents / 100).toFixed(2));
+    setStockQuantity(product.stockQuantity.toString());
     setCategory(product.category);
     setDescription(product.description);
     setStatus(product.status);
@@ -209,6 +215,9 @@ function ProductCard({ product }: { product: InventoryProduct }) {
           </p>
           <p className="mt-1 text-sm font-medium text-slate-900">
             {formatPrice(product.priceInCents)}
+          </p>
+          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
+            Stock {product.stockQuantity}
           </p>
           <p className="mt-2 text-sm text-slate-700">{product.description}</p>
 
@@ -272,7 +281,7 @@ function ProductCard({ product }: { product: InventoryProduct }) {
             </label>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-4">
             <label className="space-y-1">
               <span className="text-xs font-medium uppercase tracking-wider text-slate-600">
                 Price (USD)
@@ -284,6 +293,21 @@ function ProductCard({ product }: { product: InventoryProduct }) {
                 required
                 value={price}
                 onChange={(event) => setPrice(event.target.value)}
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"
+              />
+            </label>
+
+            <label className="space-y-1">
+              <span className="text-xs font-medium uppercase tracking-wider text-slate-600">
+                Stock
+              </span>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                required
+                value={stockQuantity}
+                onChange={(event) => setStockQuantity(event.target.value)}
                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"
               />
             </label>
