@@ -74,13 +74,13 @@ export function StorefrontHeader({
 
   return (
     <>
-      <header className="h-12 bg-white">
-        <div className="mx-auto flex h-full w-full max-w-6xl items-center justify-between px-4">
-          <span className="text-xs font-semibold uppercase tracking-[0.24em]">
+      <header className="bg-white">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-3">
+          <span className="text-sm font-semibold uppercase tracking-[0.24em]">
             Shop Template
           </span>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               aria-label="Toggle product search"
@@ -95,14 +95,14 @@ export function StorefrontHeader({
                   return nextIsOpen;
                 });
               }}
-              className="inline-flex h-9 w-9 cursor-pointer items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-slate-700"
             >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.75"
-                className="h-5 w-5"
+                className="h-6 w-6"
               >
                 <path
                   strokeLinecap="round"
@@ -115,14 +115,14 @@ export function StorefrontHeader({
             <Link
               href="/auth"
               aria-label="Open sign in and sign up page"
-              className="inline-flex h-9 w-9 items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 items-center justify-center text-slate-700"
             >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.9"
-                className="h-5 w-5"
+                className="h-6 w-6"
               >
                 <path
                   strokeLinecap="round"
@@ -134,14 +134,14 @@ export function StorefrontHeader({
 
             <span
               aria-hidden="true"
-              className="inline-flex h-9 w-9 items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 items-center justify-center text-slate-700"
             >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.75"
-                className="h-5 w-5"
+                className="h-6 w-6"
               >
                 <path
                   strokeLinecap="round"
@@ -157,14 +157,14 @@ export function StorefrontHeader({
               aria-expanded={isMenuOpen}
               aria-controls="storefront-sidebar"
               onClick={() => setIsMenuOpen(true)}
-              className="inline-flex h-9 w-9 cursor-pointer items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-slate-700"
             >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.75"
-                className="h-5 w-5"
+                className="h-6 w-6"
               >
                 <path strokeLinecap="round" d="M4.5 7.5h15" />
                 <path strokeLinecap="round" d="M4.5 12h15" />
