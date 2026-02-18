@@ -45,6 +45,32 @@ function parseCategoryFilter(
   return normalized;
 }
 
+function parseSearchTerm(rawValue: string | string[] | undefined): string | null {
+  const value = getFirstValue(rawValue);
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.trim();
+  return normalized.length > 0 ? normalized : null;
+}
+
+function getCategoryMatches(searchTerm: string): ProductCategoryValue[] {
+  const normalizedTerm = searchTerm.toLowerCase();
+
+  return PRODUCT_CATEGORIES.filter((category) => {
+    const categoryKey = category.toLowerCase();
+    const categoryLabel = PRODUCT_CATEGORY_LABELS[category].toLowerCase();
+
+    return (
+      categoryKey.includes(normalizedTerm) ||
+      categoryLabel.includes(normalizedTerm) ||
+      normalizedTerm.includes(categoryKey) ||
+      normalizedTerm.includes(categoryLabel)
+    );
+  });
+}
+
 type HomeSearchParams = Record<string, string | string[] | undefined>;
 
 export default async function Home({
@@ -54,11 +80,42 @@ export default async function Home({
 }) {
   const resolvedSearchParams = (await searchParams) ?? {};
   const activeCategory = parseCategoryFilter(resolvedSearchParams.category);
+  const searchTerm = parseSearchTerm(resolvedSearchParams.q);
+  const searchCategoryMatches = searchTerm
+    ? getCategoryMatches(searchTerm)
+    : [];
 
   const products = await prisma.product.findMany({
     where: {
       status: ProductStatus.PUBLISHED,
       ...(activeCategory ? { category: activeCategory } : {}),
+      ...(searchTerm
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: searchTerm,
+                  mode: "insensitive",
+                },
+              },
+              {
+                sku: {
+                  contains: searchTerm,
+                  mode: "insensitive",
+                },
+              },
+              ...(searchCategoryMatches.length > 0
+                ? [
+                    {
+                      category: {
+                        in: searchCategoryMatches,
+                      },
+                    },
+                  ]
+                : []),
+            ],
+          }
+        : {}),
     },
     orderBy: {
       createdAt: "desc",
@@ -67,7 +124,7 @@ export default async function Home({
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <StorefrontHeader />
+      <StorefrontHeader initialSearchTerm={searchTerm ?? ""} />
       <main className="mx-auto flex w-full max-w-6xl flex-col px-4 py-16">
         <h1 className="text-3xl font-semibold tracking-tight">Shop</h1>
         <p className="mt-3 max-w-xl text-sm text-slate-600">

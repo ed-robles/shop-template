@@ -1,10 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 
-export function StorefrontHeader() {
+type StorefrontHeaderProps = {
+  initialSearchTerm?: string;
+};
+
+export function StorefrontHeader({
+  initialSearchTerm = "",
+}: StorefrontHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(
+    initialSearchTerm.length > 0,
+  );
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -27,15 +42,76 @@ export function StorefrontHeader() {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm);
+    if (initialSearchTerm.length > 0) {
+      setIsSearchOpen(true);
+    }
+  }, [initialSearchTerm]);
+
+  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const params = new URLSearchParams(searchParams.toString());
+    const normalizedSearchTerm = searchTerm.trim();
+
+    if (normalizedSearchTerm.length > 0) {
+      params.set("q", normalizedSearchTerm);
+    } else {
+      params.delete("q");
+    }
+
+    const queryString = params.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname);
+  };
+
+  const focusSearchInput = () => {
+    window.requestAnimationFrame(() => {
+      searchInputRef.current?.focus();
+      searchInputRef.current?.select();
+    });
+  };
+
   return (
     <>
-      <header className="h-12 border-b border-slate-200 bg-white">
+      <header className="h-12 bg-white">
         <div className="mx-auto flex h-full w-full max-w-6xl items-center justify-between px-4">
           <span className="text-xs font-semibold uppercase tracking-[0.24em]">
             Shop Template
           </span>
 
           <div className="flex items-center gap-1">
+            <button
+              type="button"
+              aria-label="Toggle product search"
+              aria-expanded={isSearchOpen}
+              aria-controls="storefront-product-search"
+              onClick={() => {
+                setIsSearchOpen((isOpen) => {
+                  const nextIsOpen = !isOpen;
+                  if (nextIsOpen) {
+                    focusSearchInput();
+                  }
+                  return nextIsOpen;
+                });
+              }}
+              className="inline-flex h-9 w-9 cursor-pointer items-center justify-center text-slate-700"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                />
+              </svg>
+            </button>
+
             <Link
               href="/auth"
               aria-label="Open sign in and sign up page"
@@ -98,6 +174,47 @@ export function StorefrontHeader() {
           </div>
         </div>
       </header>
+      <div
+        className={`overflow-hidden bg-white transition-[max-height,opacity] duration-300 ${
+          isSearchOpen ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="mx-auto w-full max-w-6xl px-4 py-2">
+          <form
+            id="storefront-product-search"
+            onSubmit={handleSearchSubmit}
+            className="flex items-center gap-2"
+          >
+            <label htmlFor="storefront-search-input" className="sr-only">
+              Search products by name, category, or SKU
+            </label>
+            <div className="flex h-9 w-full items-center gap-2">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                aria-hidden="true"
+                className="h-3.5 w-3.5 text-slate-700"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                />
+              </svg>
+              <input
+                ref={searchInputRef}
+                id="storefront-search-input"
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                className="h-9 w-full bg-white text-sm text-slate-900 outline-none"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
 
       <div
         className={`fixed inset-0 z-50 transition-opacity duration-300 ${
