@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, KeyboardEvent, useMemo, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
 type AuthMode =
@@ -140,6 +140,11 @@ export default function AuthPageClient({
 
   const handleEmailSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
+
     clearFeedback();
     setNeedsVerification(false);
     setIsSubmitting(true);
@@ -240,6 +245,22 @@ export default function AuthPageClient({
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handlePasswordEnterSubmit = (
+    event: KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key !== "Enter" || event.nativeEvent.isComposing) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
+
+    event.currentTarget.form?.requestSubmit();
   };
 
   const handleResendVerificationEmail = async () => {
@@ -395,6 +416,7 @@ export default function AuthPageClient({
                   type="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
+                  onKeyDown={handlePasswordEnterSubmit}
                   placeholder="password"
                   autoComplete={isSignUp ? "new-password" : "current-password"}
                   required
@@ -410,6 +432,7 @@ export default function AuthPageClient({
                   type="password"
                   value={newPassword}
                   onChange={(event) => setNewPassword(event.target.value)}
+                  onKeyDown={handlePasswordEnterSubmit}
                   placeholder="New password"
                   autoComplete="new-password"
                   required
@@ -420,6 +443,7 @@ export default function AuthPageClient({
                   type="password"
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
+                  onKeyDown={handlePasswordEnterSubmit}
                   placeholder="Confirm new password"
                   autoComplete="new-password"
                   required
@@ -502,7 +526,7 @@ export default function AuthPageClient({
 
         <Link
           href="/"
-          className="mt-6 inline-flex w-full items-center justify-center gap-2 bg-white px-4 py-2.5 text-sm font-medium text-black"
+          className="mt-6 mx-auto flex w-fit items-center gap-2 bg-white px-4 py-2.5 text-sm font-medium text-black"
         >
           <svg
             viewBox="0 0 24 24"
