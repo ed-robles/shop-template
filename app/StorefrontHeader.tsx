@@ -98,7 +98,7 @@ export function StorefrontHeader({
                   return nextIsOpen;
                 });
               }}
-              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -118,7 +118,7 @@ export function StorefrontHeader({
             <Link
               href="/account"
               aria-label="Open account page"
-              className="inline-flex h-10 w-10 items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 items-center justify-center text-black"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -137,7 +137,7 @@ export function StorefrontHeader({
 
             <span
               aria-hidden="true"
-              className="inline-flex h-10 w-10 items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 items-center justify-center text-black"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -160,7 +160,7 @@ export function StorefrontHeader({
               aria-expanded={isMenuOpen}
               aria-controls="storefront-sidebar"
               onClick={() => setIsMenuOpen(true)}
-              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-slate-700"
+              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -198,7 +198,7 @@ export function StorefrontHeader({
                 stroke="currentColor"
                 strokeWidth="1.75"
                 aria-hidden="true"
-                className="h-3.5 w-3.5 text-slate-700"
+                className="h-3.5 w-3.5 text-black"
               >
                 <path
                   strokeLinecap="round"
