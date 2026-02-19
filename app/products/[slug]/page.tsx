@@ -37,7 +37,7 @@ export default async function ProductPage({
   const isOutOfStock = product.stockQuantity <= 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900">
       <StorefrontHeader />
       <main className="px-4 py-10">
         <div className="mx-auto w-full max-w-5xl">

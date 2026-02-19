@@ -123,12 +123,12 @@ export default async function Home({
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900">
       <StorefrontHeader
         initialSearchTerm={searchTerm ?? ""}
         activeCategory={activeCategory}
       />
-      <main className="mx-auto flex w-full max-w-6xl flex-col px-4 py-8">
+      <main className="mx-auto flex w-full max-w-none flex-col px-2 py-8 sm:px-3">
 
         {products.length === 0 ? (
           <p className="mt-8 rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600">
@@ -139,41 +139,28 @@ export default async function Home({
               : "No published products yet."}
           </p>
         ) : (
-          <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="mt-8 grid grid-cols-2 gap-1 lg:grid-cols-4">
             {products.map((product) => (
               <Link
                 key={product.id}
                 href={`/products/${product.slug}`}
-                className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow"
+                className="bg-white transition"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="h-56 w-full rounded-lg object-cover"
+                  className="aspect-[4/5] w-full object-cover"
                   loading="lazy"
                 />
-                <h2 className="mt-3 text-base font-semibold tracking-tight">
-                  {product.name}
-                </h2>
-                <p className="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
-                  SKU {product.sku || "pending"}
-                </p>
-                <p className="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
-                  {PRODUCT_CATEGORY_LABELS[product.category]}
-                </p>
-                <p
-                  className={`mt-1 text-xs font-semibold uppercase tracking-wider ${
-                    product.stockQuantity > 0 ? "text-emerald-700" : "text-rose-600"
-                  }`}
-                >
-                  {product.stockQuantity > 0
-                    ? `In stock: ${product.stockQuantity}`
-                    : "Out of stock"}
-                </p>
-                <p className="mt-1 text-sm text-slate-700">
-                  {formatPrice(product.priceInCents)}
-                </p>
+                <div className="mt-2 flex items-baseline justify-between gap-3 px-3 pb-3">
+                  <h2 className="flex-1 truncate text-base font-light tracking-tight text-slate-900">
+                    {product.name}
+                  </h2>
+                  <p className="whitespace-nowrap text-right text-sm text-black">
+                    {formatPrice(product.priceInCents)}
+                  </p>
+                </div>
               </Link>
             ))}
           </div>

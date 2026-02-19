@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function CheckoutSuccessPage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900">
       <main className="mx-auto w-full max-w-3xl px-4 py-12">
         <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
           <h1 className="text-2xl font-semibold tracking-tight">Order placed</h1>

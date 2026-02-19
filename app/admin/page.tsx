@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function AdminPage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4">
           <div>
