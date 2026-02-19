@@ -325,15 +325,15 @@ export function StorefrontHeader({
             isMenuOpen ? "translate-x-0" : "-translate-x-full"
           } w-full sm:w-[22rem]`}
         >
-          <div className="flex h-12 items-center justify-between border-b border-slate-200 px-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-700">
+          <div className="flex h-12 items-center justify-between px-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-black">
               Menu
             </p>
             <button
               type="button"
               aria-label="Close navigation menu"
               onClick={() => setIsMenuOpen(false)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 text-slate-700 transition hover:border-slate-400 hover:text-slate-950"
+              className="inline-flex h-8 w-8 items-center justify-center text-black"
             >
               <svg
                 viewBox="0 0 24 24"
