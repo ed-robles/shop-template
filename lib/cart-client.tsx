@@ -49,8 +49,10 @@ type AddCartItemInput = {
 type CartContextValue = {
   cart: CartSnapshot;
   isCartOpen: boolean;
+  isSignedIn: boolean;
   isLoading: boolean;
   isMutating: boolean;
+  isCheckingOut: boolean;
   errorMessage: string | null;
   openCart: () => void;
   closeCart: () => void;
@@ -64,6 +66,7 @@ type CartContextValue = {
     quantity: number,
   ) => Promise<void>;
   remove: (itemId: string, productId: string) => Promise<void>;
+  checkout: () => Promise<void>;
 };
 
 const EMPTY_CART: CartSnapshot = {
@@ -273,6 +276,23 @@ async function requestCart(
   return payload.cart;
 }
 
+async function requestCheckoutUrl() {
+  const response = await fetch("/api/checkout", {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error(await parseApiError(response));
+  }
+
+  const payload = (await response.json()) as { url?: string };
+  if (!payload.url) {
+    throw new Error("Checkout URL is missing.");
+  }
+
+  return payload.url;
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const { data: sessionData, isPending: isSessionPending } = authClient.useSession();
   const session = sessionData as SessionLike;
@@ -283,6 +303,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isMutating, setIsMutating] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const mergedUserRef = useRef<string | null>(null);
 
@@ -562,12 +583,41 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [isSignedIn],
   );
 
+  const checkout = useCallback(async () => {
+    setErrorMessage(null);
+
+    if (!isSignedIn) {
+      setErrorMessage("Sign in to continue checkout.");
+      return;
+    }
+
+    if (cart.items.length === 0) {
+      setErrorMessage("Your cart is empty.");
+      return;
+    }
+
+    setIsCheckingOut(true);
+
+    try {
+      const checkoutUrl = await requestCheckoutUrl();
+      window.location.assign(checkoutUrl);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unable to start checkout.",
+      );
+    } finally {
+      setIsCheckingOut(false);
+    }
+  }, [cart.items.length, isSignedIn]);
+
   const value = useMemo<CartContextValue>(
     () => ({
       cart,
       isCartOpen,
+      isSignedIn,
       isLoading,
       isMutating,
+      isCheckingOut,
       errorMessage,
       openCart: () => setIsCartOpen(true),
       closeCart: () => setIsCartOpen(false),
@@ -581,8 +631,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
       add,
       setQuantity,
       remove,
+      checkout,
     }),
-    [add, cart, errorMessage, isCartOpen, isLoading, isMutating, refresh, remove, setQuantity],
+    [
+      add,
+      cart,
+      checkout,
+      errorMessage,
+      isCartOpen,
+      isCheckingOut,
+      isLoading,
+      isMutating,
+      isSignedIn,
+      refresh,
+      remove,
+      setQuantity,
+    ],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -33,8 +33,10 @@ export function StorefrontHeader({
   const {
     cart,
     isCartOpen,
+    isSignedIn,
     isLoading,
     isMutating,
+    isCheckingOut,
     errorMessage,
     openCart,
     closeCart,
@@ -42,6 +44,7 @@ export function StorefrontHeader({
     clearAdjustments,
     setQuantity,
     remove,
+    checkout,
   } = useCart();
 
   useEffect(() => {
@@ -478,6 +481,34 @@ export function StorefrontHeader({
               <span>Subtotal</span>
               <span>{formatPrice(cart.subtotalInCents)}</span>
             </div>
+            <p className="mt-3 text-xs text-slate-500">
+              Shipping address is required at checkout.
+            </p>
+            {isSignedIn ? (
+              <button
+                type="button"
+                onClick={() => {
+                  void checkout();
+                }}
+                disabled={
+                  isLoading ||
+                  isMutating ||
+                  isCheckingOut ||
+                  cart.items.length === 0
+                }
+                className="mt-3 inline-flex w-full items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isCheckingOut ? "Redirecting..." : "Checkout"}
+              </button>
+            ) : (
+              <Link
+                href="/auth"
+                onClick={closeCart}
+                className="mt-3 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-400 hover:text-slate-950"
+              >
+                Sign in to checkout
+              </Link>
+            )}
           </div>
         </aside>
       </div>
