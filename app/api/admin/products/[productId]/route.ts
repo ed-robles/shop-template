@@ -1,9 +1,12 @@
-import { ProductCategory, ProductStatus } from "@prisma/client";
+import { ProductStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { isAdminEmail } from "@/lib/admin-access";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { isProductCategory } from "@/lib/product-categories";
+import {
+  isProductCategory,
+  type ProductCategoryValue,
+} from "@/lib/product-categories";
 import {
   buildProductImageKey,
   deleteImageFromS3,
@@ -161,7 +164,7 @@ export async function PATCH(
     );
   }
 
-  const category = categoryRaw as ProductCategory;
+  const category: ProductCategoryValue = categoryRaw;
   const status = statusRaw === ProductStatus.DRAFT ? ProductStatus.DRAFT : ProductStatus.PUBLISHED;
   const slug = await createUniqueSlug(baseSlug, productId);
 
