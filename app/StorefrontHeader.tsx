@@ -4,9 +4,15 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart-client";
+import {
+  PRODUCT_CATEGORIES,
+  PRODUCT_CATEGORY_LABELS,
+  type ProductCategoryValue,
+} from "@/lib/product-categories";
 
 type StorefrontHeaderProps = {
   initialSearchTerm?: string;
+  activeCategory?: ProductCategoryValue | null;
 };
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -20,6 +26,7 @@ function formatPrice(priceInCents: number) {
 
 export function StorefrontHeader({
   initialSearchTerm = "",
+  activeCategory = null,
 }: StorefrontHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(
@@ -262,6 +269,39 @@ export function StorefrontHeader({
           </form>
         </div>
       </div>
+
+      {pathname === "/" ? (
+        <nav
+          aria-label="Product categories"
+          className="border-t-[0.5px] border-b-[0.5px] border-black bg-white"
+        >
+          <div className="mx-auto flex w-full max-w-6xl items-center gap-5 overflow-x-auto px-5 py-3">
+            <Link
+              href="/"
+              className={`whitespace-nowrap text-xs font-semibold uppercase tracking-tight text-black ${
+                activeCategory === null
+                  ? "underline decoration-2 underline-offset-4"
+                  : "opacity-70 hover:opacity-100"
+              }`}
+            >
+              All
+            </Link>
+            {PRODUCT_CATEGORIES.map((category) => (
+              <Link
+                key={category}
+                href={`/?category=${category.toLowerCase()}`}
+                className={`whitespace-nowrap text-xs font-semibold uppercase tracking-tight text-black ${
+                  activeCategory === category
+                    ? "underline decoration-2 underline-offset-4"
+                    : "opacity-70 hover:opacity-100"
+                }`}
+              >
+                {PRODUCT_CATEGORY_LABELS[category]}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      ) : null}
 
       <div
         className={`fixed inset-0 z-50 transition-opacity duration-300 ${

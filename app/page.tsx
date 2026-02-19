@@ -124,38 +124,11 @@ export default async function Home({
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <StorefrontHeader initialSearchTerm={searchTerm ?? ""} />
-      <main className="mx-auto flex w-full max-w-6xl flex-col px-4 py-16">
-        <h1 className="text-3xl font-semibold tracking-tight">Shop</h1>
-        <p className="mt-3 max-w-xl text-sm text-slate-600">
-          Browse the latest published products from your inventory module.
-        </p>
-
-        <div className="mt-6 flex flex-wrap gap-2">
-          <Link
-            href="/"
-            className={
-              activeCategory === null
-                ? "rounded-full bg-slate-900 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white"
-                : "rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-700 hover:border-slate-400 hover:text-slate-900"
-            }
-          >
-            All
-          </Link>
-          {PRODUCT_CATEGORIES.map((category) => (
-            <Link
-              key={category}
-              href={`/?category=${category.toLowerCase()}`}
-              className={
-                activeCategory === category
-                  ? "rounded-full bg-slate-900 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white"
-                  : "rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-700 hover:border-slate-400 hover:text-slate-900"
-              }
-            >
-              {PRODUCT_CATEGORY_LABELS[category]}
-            </Link>
-          ))}
-        </div>
+      <StorefrontHeader
+        initialSearchTerm={searchTerm ?? ""}
+        activeCategory={activeCategory}
+      />
+      <main className="mx-auto flex w-full max-w-6xl flex-col px-4 py-8">
 
         {products.length === 0 ? (
           <p className="mt-8 rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600">
@@ -166,7 +139,7 @@ export default async function Home({
               : "No published products yet."}
           </p>
         ) : (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
             {products.map((product) => (
               <Link
                 key={product.id}
