@@ -367,7 +367,7 @@ export function StorefrontHeader({
 
         <aside
           id="storefront-cart-sidebar"
-          className={`absolute right-0 top-0 flex h-full w-full flex-col border-l border-slate-300 bg-[#efefef] transition-transform duration-300 sm:w-[30rem] ${
+          className={`absolute right-0 top-0 flex h-full w-full flex-col border-l border-slate-300 bg-white transition-transform duration-300 sm:w-[30rem] ${
             isCartOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
