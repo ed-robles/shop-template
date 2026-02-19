@@ -13,6 +13,8 @@ export default async function AdminInventoryPage() {
     take: 50,
   });
 
+  type InventoryProduct = (typeof products)[number];
+
   return (
     <div className="min-h-screen bg-white px-4 py-10 text-slate-900">
       <div className="mx-auto w-full max-w-5xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -51,7 +53,7 @@ export default async function AdminInventoryPage() {
             </p>
           ) : (
             <ManageProductsList
-              products={products.map((product) => ({
+              products={products.map((product: InventoryProduct) => ({
                 id: product.id,
                 name: product.name,
                 slug: product.slug,
