@@ -333,11 +333,7 @@ export function StorefrontHeader({
               type="button"
               aria-label="Close navigation menu"
               onClick={() => setIsMenuOpen(false)}
-<<<<<<< HEAD
               className="inline-flex h-8 w-8 items-center justify-center text-black transition hover:text-slate-700"
-=======
-              className="inline-flex h-8 w-8 items-center justify-center text-black"
->>>>>>> 824b408f0db873ad0bedad5099e830f0a91d5178
             >
               <svg
                 viewBox="0 0 24 24"
