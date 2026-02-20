@@ -154,10 +154,10 @@ export default async function Home({
                   loading="lazy"
                 />
                 <div className="mt-2 flex items-baseline justify-between gap-3 px-3 pb-3">
-                  <h2 className="flex-1 truncate text-base font-light tracking-tight text-slate-900">
+                  <h2 className="flex-1 truncate text-base font-normal tracking-tight text-slate-900">
                     {product.name}
                   </h2>
-                  <p className="whitespace-nowrap text-right text-sm text-black">
+                  <p className="whitespace-nowrap text-right text-sm font-normal text-black">
                     {formatPrice(product.priceInCents)}
                   </p>
                 </div>

@@ -321,19 +321,19 @@ export function StorefrontHeader({
 
         <aside
           id="storefront-sidebar"
-          className={`absolute left-0 top-0 h-full border-r border-slate-200 bg-white shadow-xl transition-transform duration-300 ${
+          className={`absolute left-0 top-0 h-full bg-white shadow-xl transition-transform duration-300 ${
             isMenuOpen ? "translate-x-0" : "-translate-x-full"
           } w-full sm:w-[22rem]`}
         >
-          <div className="flex h-12 items-center justify-between border-b border-slate-200 px-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-700">
+          <div className="flex h-12 items-center justify-between px-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-black">
               Menu
             </p>
             <button
               type="button"
               aria-label="Close navigation menu"
               onClick={() => setIsMenuOpen(false)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 text-slate-700 transition hover:border-slate-400 hover:text-slate-950"
+              className="inline-flex h-8 w-8 items-center justify-center text-black transition hover:text-slate-700"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -367,7 +367,7 @@ export function StorefrontHeader({
 
         <aside
           id="storefront-cart-sidebar"
-          className={`absolute right-0 top-0 flex h-full w-full flex-col border-l border-slate-300 bg-[#efefef] transition-transform duration-300 sm:w-[30rem] ${
+          className={`absolute right-0 top-0 flex h-full w-full flex-col border-l border-slate-300 bg-white transition-transform duration-300 sm:w-[30rem] ${
             isCartOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -500,7 +500,7 @@ export function StorefrontHeader({
             )}
           </div>
 
-          <div className="border-t border-slate-300 px-6 py-6">
+          <div className="px-6 py-6">
             <div className="flex items-center justify-between text-base uppercase text-black">
               <span>Subtotal</span>
               <span className="font-semibold">{formatPrice(cart.subtotalInCents)} USD</span>
