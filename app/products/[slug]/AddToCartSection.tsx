@@ -61,7 +61,7 @@ export default function AddToCartSection({
   };
 
   return (
-    <section className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <section className="mt-6 rounded-xl p-4">
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">
         {isOutOfStock ? "Out of stock" : `In stock: ${normalizedStock}`}
       </p>

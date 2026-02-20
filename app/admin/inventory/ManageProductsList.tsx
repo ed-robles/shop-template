@@ -53,9 +53,9 @@ async function parseApiError(response: Response) {
   return payload.error || "Request failed.";
 }
 
-function ProductCard({ product }: { product: InventoryProduct }) {
+function ProductRow({ product }: { product: InventoryProduct }) {
   const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [name, setName] = useState(product.name);
   const [slug, setSlug] = useState(product.slug);
   const [slugEdited, setSlugEdited] = useState(false);
@@ -122,7 +122,6 @@ function ProductCard({ product }: { product: InventoryProduct }) {
       }
 
       setSuccessMessage("Product updated.");
-      setIsEditing(false);
       setReplacementImage(null);
       router.refresh();
     } catch (error) {
@@ -167,7 +166,6 @@ function ProductCard({ product }: { product: InventoryProduct }) {
   };
 
   const resetEditState = () => {
-    setIsEditing(false);
     setName(product.name);
     setSlug(product.slug);
     setSlugEdited(false);
@@ -182,77 +180,77 @@ function ProductCard({ product }: { product: InventoryProduct }) {
   };
 
   return (
-    <article className="rounded-xl border border-slate-200 p-3">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="h-40 w-full rounded-lg object-cover"
-        loading="lazy"
-      />
-
-      {!isEditing ? (
-        <>
-          <div className="mt-3 flex items-center justify-between gap-3">
-            <h3 className="text-base font-semibold tracking-tight">{product.name}</h3>
-            <span
-              className={
-                product.status === "PUBLISHED"
-                  ? "rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-700"
-                  : "rounded-full bg-slate-200 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-700"
-              }
-            >
-              {product.status.toLowerCase()}
-            </span>
-          </div>
-
-          <p className="mt-1 text-sm text-slate-600">{product.slug}</p>
-          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
-            SKU {product.sku || "pending"}
-          </p>
-          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
-            {PRODUCT_CATEGORY_LABELS[product.category]}
-          </p>
-          <p className="mt-1 text-sm font-medium text-slate-900">
-            {formatPrice(product.priceInCents)}
-          </p>
-          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-slate-500">
-            Stock {product.stockQuantity}
-          </p>
-          <p className="mt-2 text-sm text-slate-700">{product.description}</p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                setErrorMessage("");
-                setSuccessMessage("");
-                setIsEditing(true);
-              }}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-slate-700 hover:border-slate-400 hover:text-slate-900"
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="rounded-lg border border-rose-300 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-rose-700 hover:border-rose-400 hover:text-rose-800 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isDeleting ? "Deleting..." : "Delete"}
-            </button>
-            {product.status === "PUBLISHED" ? (
-              <Link
-                href={`/products/${product.slug}`}
-                className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-slate-700 hover:border-slate-400 hover:text-slate-900"
+    <article className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="flex items-center gap-3 border-b border-slate-200 px-3 py-2">
+        <button
+          type="button"
+          onClick={() => {
+            setErrorMessage("");
+            setSuccessMessage("");
+            setIsExpanded((current) => !current);
+          }}
+          className="flex min-w-0 flex-1 items-center gap-3 text-left"
+        >
+          <span className="text-sm text-slate-400">{isExpanded ? "▾" : "▸"}</span>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="truncate text-sm font-semibold text-slate-900">
+                {product.name}
+              </h3>
+              <span
+                className={
+                  product.status === "PUBLISHED"
+                    ? "rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-700"
+                    : "rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-700"
+                }
               >
-                View
-              </Link>
-            ) : null}
+                {product.status.toLowerCase()}
+              </span>
+            </div>
+            <p className="truncate text-xs text-slate-600">
+              SKU {product.sku || "pending"} • {formatPrice(product.priceInCents)} •
+              {` Stock ${product.stockQuantity}`}
+            </p>
           </div>
-        </>
-      ) : (
-        <form onSubmit={handleSave} className="mt-3 space-y-3">
+        </button>
+
+        <button
+          type="button"
+          onClick={handleDelete}
+          disabled={isDeleting}
+          className="rounded-lg border border-rose-300 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-rose-700 hover:border-rose-400 hover:text-rose-800 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
+        </button>
+      </div>
+
+      {isExpanded ? (
+        <div className="space-y-3 bg-slate-50 p-3">
+          <div className="flex items-start gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="h-24 w-24 rounded-lg object-cover"
+              loading="lazy"
+            />
+            <div className="space-y-1 text-xs text-slate-600">
+              <p>{product.slug}</p>
+              <p className="font-medium uppercase tracking-wider">
+                {PRODUCT_CATEGORY_LABELS[product.category]}
+              </p>
+              {product.status === "PUBLISHED" ? (
+                <Link
+                  href={`/products/${product.slug}`}
+                  className="inline-block rounded-lg border border-slate-300 px-2 py-1 font-medium uppercase tracking-wider text-slate-700 hover:border-slate-400 hover:text-slate-900"
+                >
+                  View product page
+                </Link>
+              ) : null}
+            </div>
+          </div>
+
+          <form onSubmit={handleSave} className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-1">
               <span className="text-xs font-medium uppercase tracking-wider text-slate-600">
@@ -390,8 +388,9 @@ function ProductCard({ product }: { product: InventoryProduct }) {
               Cancel
             </button>
           </div>
-        </form>
-      )}
+          </form>
+        </div>
+      ) : null}
 
       {errorMessage ? (
         <p className="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
@@ -444,9 +443,9 @@ export default function ManageProductsList({
           {`No products found for SKU "${normalizedSkuQuery}".`}
         </p>
       ) : (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="mt-4 space-y-3">
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductRow key={product.id} product={product} />
           ))}
         </div>
       )}
