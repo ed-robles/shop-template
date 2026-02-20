@@ -17,9 +17,9 @@ export default async function AdminInventoryPage() {
 
   return (
     <div className="min-h-screen bg-white px-4 py-10 text-slate-900">
-      <div className="mx-auto w-full max-w-5xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="mx-auto w-full max-w-5xl rounded-2xl bg-white p-6">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="text-2xl font-semibold tracking-tight">inventory</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Inventory</h1>
           <Link
             href="/admin"
             className="text-xs font-medium uppercase tracking-wider text-slate-500 hover:text-slate-900"

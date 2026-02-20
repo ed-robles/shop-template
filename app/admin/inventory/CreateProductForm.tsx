@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   PRODUCT_CATEGORIES,
@@ -25,6 +25,7 @@ type CreateProductResponse = {
 
 export default function CreateProductForm() {
   const router = useRouter();
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [slugEdited, setSlugEdited] = useState(false);
@@ -66,6 +67,9 @@ export default function CreateProductForm() {
     setDescription("");
     setStatus("PUBLISHED");
     setImageFile(null);
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -233,11 +237,12 @@ export default function CreateProductForm() {
         />
       </label>
 
-      <label className="space-y-1">
+      <label className="mb-4 block space-y-1">
         <span className="text-xs font-medium uppercase tracking-wider text-slate-600">
           Image
         </span>
         <input
+          ref={imageInputRef}
           type="file"
           accept="image/*"
           required

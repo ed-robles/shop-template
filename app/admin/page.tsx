@@ -24,7 +24,7 @@ export default function AdminPage() {
         <div className="max-w-3xl">
           <h1 className="text-2xl font-semibold tracking-tight">Modules</h1>
           <p className="mt-2 text-sm text-slate-600">
-            Build each admin module one at a time. Start with inventory.
+            Build each admin module one at a time. Start with Inventory.
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export default function AdminPage() {
               Module 01
             </p>
             <h2 className="mt-2 text-xl font-semibold tracking-tight">
-              inventory
+              Inventory
             </h2>
             <p className="mt-2 text-sm text-slate-600">
               Create products, upload images, and manage product details shown
