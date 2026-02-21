@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { StorefrontHeader } from "../StorefrontHeader";
 import AccountPageClient from "./AccountPageClient";
 
@@ -44,6 +45,30 @@ export default async function AccountPage() {
     redirect("/auth");
   }
 
+  const userRecord = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: { id: true },
+  });
+  const orders = await prisma.order.findMany({
+    where: userRecord
+      ? {
+          OR: [{ userId: userRecord.id }, { customerEmail: userEmail }],
+        }
+      : {
+          customerEmail: userEmail,
+        },
+    include: {
+      items: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
   return (
     <div className="min-h-screen bg-white text-black">
       <StorefrontHeader />
@@ -53,6 +78,20 @@ export default async function AccountPage() {
           email={userEmail}
           emailVerified={user?.emailVerified}
           createdAtLabel={formatCreatedAt(user?.createdAt)}
+          orders={orders.map((order) => ({
+            id: order.id,
+            status: order.status,
+            currency: order.currency,
+            amountTotalInCents: order.amountTotalInCents,
+            createdAtLabel: formatCreatedAt(order.createdAt) || "Unknown",
+            paidAtLabel: formatCreatedAt(order.paidAt),
+            items: order.items.map((item) => ({
+              id: item.id,
+              productName: item.productName,
+              quantity: item.quantity,
+              lineTotalInCents: item.lineTotalInCents,
+            })),
+          }))}
         />
       </main>
     </div>
