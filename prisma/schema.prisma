@@ -23,6 +23,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   cart          Cart?
+  orders        Order[]
 }
 
 model Session {
@@ -82,6 +83,13 @@ enum ProductCategory {
   ACCESSORIES
 }
 
+enum OrderStatus {
+  PAYMENT_PENDING
+  PAID
+  PAYMENT_FAILED
+  STOCK_FAILED
+}
+
 model Product {
   id           String        @id @default(cuid())
   name         String
@@ -97,9 +105,62 @@ model Product {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   cartItems    CartItem[]
+  orderItems   OrderItem[]
 
   @@index([status])
   @@index([category])
+  @@index([createdAt])
+}
+
+model Order {
+  id                     String      @id @default(cuid())
+  userId                 String?
+  user                   User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  stripeCheckoutSessionId String     @unique
+  stripePaymentIntentId  String?
+  customerEmail          String?
+  currency               String      @default("usd")
+  amountSubtotalInCents  Int         @default(0)
+  amountTotalInCents     Int         @default(0)
+  status                 OrderStatus @default(PAYMENT_PENDING)
+  paidAt                 DateTime?
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  items                  OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id               String   @id @default(cuid())
+  orderId          String
+  order            Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId        String?
+  product          Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName      String
+  unitAmountInCents Int
+  quantity         Int
+  lineTotalInCents Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model StripeWebhookEvent {
+  id              String   @id @default(cuid())
+  stripeEventId   String   @unique
+  eventType       String
+  processedAt     DateTime?
+  processingError String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([eventType])
+  @@index([processedAt])
   @@index([createdAt])
 }
 

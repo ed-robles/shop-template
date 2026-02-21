@@ -54,6 +54,9 @@ export async function POST(request: Request) {
           unit_amount: item.priceInCents,
           product_data: {
             name: item.name,
+            metadata: {
+              productId: item.productId,
+            },
           },
         },
       })),

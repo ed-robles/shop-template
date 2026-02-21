@@ -36,3 +36,12 @@ export function getAllowedShippingCountries() {
 
   return (uniqueValues.length > 0 ? uniqueValues : ["US"]) as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[];
 }
+
+export function getStripeWebhookSecret() {
+  const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  if (!stripeWebhookSecret) {
+    throw new Error("STRIPE_WEBHOOK_SECRET is missing.");
+  }
+
+  return stripeWebhookSecret;
+}
