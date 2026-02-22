@@ -150,8 +150,8 @@ export default function AccountPageClient({
         </button>
       </div>
 
-      <section className="mt-8 bg-white p-6">
-        <h2 className="text-xl font-semibold tracking-tight">Orders</h2>
+      <section className="mt-8 bg-white">
+        <h2 className="text-3xl font-semibold tracking-tight">Orders</h2>
         <p className="mt-2 text-sm text-black/70">Recent orders tied to your account email.</p>
 
         {orders.length === 0 ? (
