@@ -29,7 +29,6 @@ export default function AddToCartSection({
   stockQuantity,
 }: AddToCartSectionProps) {
   const { add, openCart, isMutating } = useCart();
-  const [quantity, setQuantity] = useState(1);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   const normalizedStock = normalizeQuantity(stockQuantity);
@@ -40,12 +39,6 @@ export default function AddToCartSection({
       return;
     }
 
-    const requestedQuantity = normalizeQuantity(quantity);
-    if (requestedQuantity <= 0) {
-      setStatusMessage("Enter a quantity of 1 or greater.");
-      return;
-    }
-
     await add({
       productId,
       slug,
@@ -53,7 +46,7 @@ export default function AddToCartSection({
       imageUrl,
       priceInCents,
       stockQuantity: normalizedStock,
-      quantity: requestedQuantity,
+      quantity: 1,
     });
 
     setStatusMessage("Added to cart.");
@@ -61,25 +54,12 @@ export default function AddToCartSection({
   };
 
   return (
-    <section className="mt-6 rounded-xl p-4">
+    <section className="mt-6 rounded-xl">
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">
         {isOutOfStock ? "Out of stock" : `In stock: ${normalizedStock}`}
       </p>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <label className="flex items-center gap-2 text-sm text-slate-700">
-          <span>Qty</span>
-          <input
-            type="number"
-            min={1}
-            max={normalizedStock}
-            disabled={isOutOfStock || isMutating}
-            value={quantity}
-            onChange={(event) => setQuantity(normalizeQuantity(Number(event.target.value)))}
-            className="h-9 w-20 rounded-lg border border-slate-300 bg-white px-2 text-sm"
-          />
-        </label>
-
         <button
           type="button"
           onClick={() => {

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ProductStatus } from "@prisma/client";
 import { notFound } from "next/navigation";
-import { PRODUCT_CATEGORY_LABELS } from "@/lib/product-categories";
 import { prisma } from "@/lib/prisma";
 import { StorefrontHeader } from "@/app/StorefrontHeader";
 import AddToCartSection from "./AddToCartSection";
@@ -41,12 +40,19 @@ export default async function ProductPage({
       <StorefrontHeader />
       <main className="px-4 py-10">
         <div className="mx-auto w-full max-w-5xl">
-          <Link
-            href="/"
-            className="text-xs font-medium uppercase tracking-wider text-slate-500 hover:text-slate-900"
-          >
-            Back to shop
-          </Link>
+          <nav aria-label="Breadcrumb" className="text-sm text-slate-500">
+            <ol className="flex flex-wrap items-center gap-2">
+              <li>
+                <Link href="/" className="hover:text-slate-900">
+                  Shop
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-slate-300">
+                /
+              </li>
+              <li className="text-slate-900">{product.name}</li>
+            </ol>
+          </nav>
 
           <article className="mt-4 grid gap-6 p-4 md:grid-cols-2 md:p-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -58,9 +64,6 @@ export default async function ProductPage({
 
             <div>
               <h1 className="text-3xl font-semibold tracking-tight">{product.name}</h1>
-              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                {PRODUCT_CATEGORY_LABELS[product.category]}
-              </p>
               <p className="mt-2 text-xl font-medium text-slate-800">
                 {formatPrice(product.priceInCents)}
               </p>
