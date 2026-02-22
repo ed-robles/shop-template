@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-client";
+import { StorefrontFooter } from "./StorefrontFooter";
 
 export const metadata: Metadata = {
   title: "E-Commerce Template",
@@ -15,7 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white">
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <div className="flex min-h-screen flex-col">
+            <div className="flex-1">{children}</div>
+            <StorefrontFooter />
+          </div>
+        </CartProvider>
       </body>
     </html>
   );
