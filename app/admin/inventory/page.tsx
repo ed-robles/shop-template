@@ -16,8 +16,8 @@ export default async function AdminInventoryPage() {
   type InventoryProduct = (typeof products)[number];
 
   return (
-    <div className="min-h-screen bg-white px-4 py-10 text-slate-900">
-      <div className="mx-auto w-full max-w-5xl rounded-2xl bg-white p-6">
+    <div className="min-h-screen bg-white px-2 py-10 text-slate-900 sm:px-4">
+      <div className="mx-auto w-full max-w-5xl rounded-2xl bg-white p-4 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-2xl font-semibold tracking-tight">Inventory</h1>
           <Link
