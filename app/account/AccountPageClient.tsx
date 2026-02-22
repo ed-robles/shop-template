@@ -61,21 +61,6 @@ function getOrderStatusLabel(status: AccountOrderStatus) {
   }
 }
 
-function getOrderStatusClasses(status: AccountOrderStatus) {
-  switch (status) {
-    case "PAID":
-      return "border-emerald-200 bg-emerald-50 text-emerald-700";
-    case "PAYMENT_PENDING":
-      return "border-amber-200 bg-amber-50 text-amber-800";
-    case "PAYMENT_FAILED":
-      return "border-rose-200 bg-rose-50 text-rose-700";
-    case "STOCK_FAILED":
-      return "border-orange-200 bg-orange-50 text-orange-700";
-    default:
-      return "border-slate-200 bg-slate-50 text-slate-700";
-  }
-}
-
 function formatCurrency(amountInCents: number, currency: string) {
   const normalizedCurrency = currency.toUpperCase();
 
@@ -97,6 +82,15 @@ export default function AccountPageClient({
   orders,
 }: AccountPageClientProps) {
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [expandedOrderIds, setExpandedOrderIds] = useState<string[]>([]);
+
+  const toggleOrderExpanded = (orderId: string) => {
+    setExpandedOrderIds((current) =>
+      current.includes(orderId)
+        ? current.filter((id) => id !== orderId)
+        : [...current, orderId],
+    );
+  };
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -156,67 +150,101 @@ export default function AccountPageClient({
         </button>
       </div>
 
-      <section className="mt-8 border border-slate-200 bg-white p-6">
+      <section className="mt-8 bg-white p-6">
         <h2 className="text-xl font-semibold tracking-tight">Orders</h2>
-        <p className="mt-2 text-sm text-slate-600">Recent orders tied to your account email.</p>
+        <p className="mt-2 text-sm text-black/70">Recent orders tied to your account email.</p>
 
         {orders.length === 0 ? (
-          <p className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+          <p className="mt-4 border border-black bg-white px-4 py-3 text-sm text-black/70">
             No orders yet.
           </p>
         ) : (
           <div className="mt-5 space-y-4">
-            {orders.map((order) => (
-              <article key={order.id} className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-slate-500">Order</p>
-                    <p className="mt-1 font-mono text-sm text-slate-900">{order.id}</p>
-                  </div>
-                  <p
-                    className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getOrderStatusClasses(order.status)}`}
+            {orders.map((order) => {
+              const isExpanded = expandedOrderIds.includes(order.id);
+
+              return (
+                <article key={order.id} className="overflow-hidden border border-black bg-white">
+                  <button
+                    type="button"
+                    onClick={() => toggleOrderExpanded(order.id)}
+                    className="w-full bg-white px-4 py-3 text-left text-sm font-medium text-black transition hover:bg-zinc-100"
+                    aria-expanded={isExpanded}
+                    aria-controls={`order-details-${order.id}`}
                   >
-                    {getOrderStatusLabel(order.status)}
-                  </p>
-                </div>
+                    <span className="flex items-center justify-between gap-3">
+                      <span className="font-mono">{order.id}</span>
+                      <span className="flex items-center gap-2">
+                        <span>{formatCurrency(order.amountTotalInCents, order.currency)}</span>
+                        <svg
+                          viewBox="0 0 20 20"
+                          aria-hidden="true"
+                          className={`h-4 w-4 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                        >
+                          <path d="M5 7.5L10 12.5L15 7.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                        </svg>
+                      </span>
+                    </span>
+                  </button>
 
-                <dl className="mt-4 grid gap-3 text-sm text-slate-700 sm:grid-cols-3">
-                  <div>
-                    <dt className="text-xs uppercase tracking-wider text-slate-500">Placed</dt>
-                    <dd className="mt-1">{order.createdAtLabel}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-xs uppercase tracking-wider text-slate-500">Paid</dt>
-                    <dd className="mt-1">{order.paidAtLabel || "Not paid"}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-xs uppercase tracking-wider text-slate-500">Total</dt>
-                    <dd className="mt-1 font-medium text-slate-900">
-                      {formatCurrency(order.amountTotalInCents, order.currency)}
-                    </dd>
-                  </div>
-                </dl>
+                  {isExpanded ? (
+                    <div id={`order-details-${order.id}`} className="px-4 py-4">
+                      <dl className="grid gap-3 text-sm text-black sm:grid-cols-2">
+                        <div>
+                          <dt className="text-xs font-medium uppercase tracking-wider text-black/70">
+                            Status
+                          </dt>
+                          <dd className="mt-1">{getOrderStatusLabel(order.status)}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-xs font-medium uppercase tracking-wider text-black/70">Paid</dt>
+                          <dd className="mt-1">{order.paidAtLabel || "Not paid"}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-xs font-medium uppercase tracking-wider text-black/70">
+                            Placed
+                          </dt>
+                          <dd className="mt-1">{order.createdAtLabel}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-xs font-medium uppercase tracking-wider text-black/70">
+                            Currency
+                          </dt>
+                          <dd className="mt-1 uppercase">{order.currency}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-xs font-medium uppercase tracking-wider text-black/70">
+                            Items
+                          </dt>
+                          <dd className="mt-1">
+                            {order.items.length} item{order.items.length === 1 ? "" : "s"}
+                          </dd>
+                        </div>
+                      </dl>
 
-                <div className="mt-4 border-t border-slate-200 pt-4">
-                  <p className="text-xs uppercase tracking-wider text-slate-500">Items</p>
-                  <ul className="mt-2 space-y-2">
-                    {order.items.map((item) => (
-                      <li
-                        key={item.id}
-                        className="flex items-center justify-between gap-3 text-sm text-slate-700"
-                      >
-                        <span>
-                          {item.productName} x {item.quantity}
-                        </span>
-                        <span className="font-medium text-slate-900">
-                          {formatCurrency(item.lineTotalInCents, order.currency)}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
+                      <div className="mt-4">
+                        <p className="text-xs font-medium uppercase tracking-wider text-black/70">Items</p>
+                        <ul className="mt-2 space-y-2 px-2 py-2">
+                          {order.items.map((item) => (
+                            <li
+                              key={item.id}
+                              className="flex items-center justify-between gap-3 py-1 text-sm text-black"
+                            >
+                              <span>
+                                {item.productName} x {item.quantity}
+                              </span>
+                              <span className="font-medium">
+                                {formatCurrency(item.lineTotalInCents, order.currency)}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ) : null}
+                </article>
+              );
+            })}
           </div>
         )}
       </section>
