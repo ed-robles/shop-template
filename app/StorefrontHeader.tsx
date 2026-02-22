@@ -348,7 +348,55 @@ export function StorefrontHeader({
             </button>
           </div>
 
-          <div className="px-4 py-4" />
+          <div className="px-4 py-4">
+            <nav aria-label="Sidebar navigation" className="space-y-6">
+              <section>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/70">
+                  Categories
+                </p>
+                <ul className="mt-4 space-y-3">
+                  <li>
+                    <Link
+                      href="/"
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`text-sm uppercase tracking-[0.14em] ${
+                        pathname === "/" && activeCategory === null
+                          ? "text-black underline decoration-2 underline-offset-4"
+                          : "text-black/75 hover:text-black"
+                      }`}
+                    >
+                      All
+                    </Link>
+                  </li>
+                  {PRODUCT_CATEGORIES.map((category) => (
+                    <li key={category}>
+                      <Link
+                        href={`/?category=${category.toLowerCase()}`}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`text-sm uppercase tracking-[0.14em] ${
+                          pathname === "/" && activeCategory === category
+                            ? "text-black underline decoration-2 underline-offset-4"
+                            : "text-black/75 hover:text-black"
+                        }`}
+                      >
+                        {PRODUCT_CATEGORY_LABELS[category]}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="border-t border-black/10 pt-4">
+                <Link
+                  href="/account"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-sm uppercase tracking-[0.14em] text-black/75 hover:text-black"
+                >
+                  Account
+                </Link>
+              </section>
+            </nav>
+          </div>
         </aside>
       </div>
 
@@ -424,7 +472,7 @@ export function StorefrontHeader({
             {isLoading ? (
               <p className="text-sm text-slate-700">Loading cart...</p>
             ) : cart.items.length === 0 ? (
-              <p className="border border-slate-300 bg-[#f6f6f6] px-4 py-4 text-sm text-slate-700">
+              <p className="px-2 py-2 text-sm text-slate-700">
                 Your cart is empty.
               </p>
             ) : (
