@@ -302,6 +302,7 @@ export function StorefrontHeader({
                 ref={searchInputRef}
                 id="storefront-search-input"
                 type="search"
+                placeholder="search"
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
                 className="h-9 w-full bg-white text-sm text-slate-900 outline-none"
