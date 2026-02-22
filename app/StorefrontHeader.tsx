@@ -28,11 +28,19 @@ export function StorefrontHeader({
   initialSearchTerm = "",
   activeCategory = null,
 }: StorefrontHeaderProps) {
+  const bannerMessages = [
+    "Explore new arrivals, best sellers, and everyday staples.",
+    "Find styles for work, weekends, and everything in between.",
+    "Browse the collection and discover your next favorite.",
+  ];
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(
     initialSearchTerm.length > 0,
   );
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const [activeBannerMessageIndex, setActiveBannerMessageIndex] = useState(0);
+  const [isBannerVisible, setIsBannerVisible] = useState(true);
+  const bannerSwapTimeoutRef = useRef<number | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -83,6 +91,25 @@ export function StorefrontHeader({
     }
   }, [initialSearchTerm]);
 
+  useEffect(() => {
+    const bannerInterval = window.setInterval(() => {
+      setIsBannerVisible(false);
+      bannerSwapTimeoutRef.current = window.setTimeout(() => {
+        setActiveBannerMessageIndex((currentIndex) => {
+          return (currentIndex + 1) % bannerMessages.length;
+        });
+        setIsBannerVisible(true);
+      }, 300);
+    }, 4500);
+
+    return () => {
+      window.clearInterval(bannerInterval);
+      if (bannerSwapTimeoutRef.current !== null) {
+        window.clearTimeout(bannerSwapTimeoutRef.current);
+      }
+    };
+  }, [bannerMessages.length]);
+
   const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -108,6 +135,17 @@ export function StorefrontHeader({
 
   return (
     <>
+      <div className="flex h-7 items-center justify-center bg-black px-2">
+        <p
+          className={`text-center text-[11px] font-medium tracking-wide text-white transition-opacity duration-300 ${
+            isBannerVisible ? "opacity-100" : "opacity-0"
+          }`}
+          aria-live="polite"
+        >
+          {bannerMessages[activeBannerMessageIndex]}
+        </p>
+      </div>
+
       <header className="bg-white">
         <div className="mx-auto grid w-full max-w-none grid-cols-[1fr_auto_1fr] items-center px-2 py-3 sm:px-3">
           <div className="flex items-center justify-start gap-2">
