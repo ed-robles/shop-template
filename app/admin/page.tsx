@@ -22,7 +22,7 @@ export default function AdminPage() {
 
       <main className="mx-auto w-full max-w-6xl px-4 py-10">
         <div className="max-w-3xl">
-          <h1 className="text-2xl font-semibold tracking-tight">Modules</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
           <p className="mt-2 text-sm text-slate-600">
             Select a module for more information.
           </p>
