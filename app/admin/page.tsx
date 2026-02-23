@@ -24,7 +24,7 @@ export default function AdminPage() {
         <div className="max-w-3xl">
           <h1 className="text-2xl font-semibold tracking-tight">Modules</h1>
           <p className="mt-2 text-sm text-slate-600">
-            Build each admin module one at a time.
+            Select a module for more information.
           </p>
         </div>
 
