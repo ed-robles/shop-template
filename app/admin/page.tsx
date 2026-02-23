@@ -24,7 +24,7 @@ export default function AdminPage() {
         <div className="max-w-3xl">
           <h1 className="text-2xl font-semibold tracking-tight">Modules</h1>
           <p className="mt-2 text-sm text-slate-600">
-            Build each admin module one at a time. Start with Inventory.
+            Build each admin module one at a time.
           </p>
         </div>
 
@@ -42,6 +42,23 @@ export default function AdminPage() {
             <p className="mt-2 text-sm text-slate-600">
               Create products, upload images, and manage product details shown
               on product pages.
+            </p>
+            <p className="mt-5 text-sm font-medium text-slate-900 group-hover:underline">
+              Open module
+            </p>
+          </Link>
+
+          <Link
+            href="/admin/orders"
+            className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Module 02
+            </p>
+            <h2 className="mt-2 text-xl font-semibold tracking-tight">Orders</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Review recent orders, search by customer email, and inspect
+              line-item details in an expandable view.
             </p>
             <p className="mt-5 text-sm font-medium text-slate-900 group-hover:underline">
               Open module
