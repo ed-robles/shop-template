@@ -147,7 +147,7 @@ export function StorefrontHeader({
       </div>
 
       <header className="bg-white">
-        <div className="mx-auto grid w-full max-w-none grid-cols-[1fr_auto_1fr] items-center py-1 sm:px-3">
+        <div className="mx-auto grid w-full max-w-none grid-cols-[1fr_auto_1fr] items-center px-1 py-1 sm:px-3">
           <div className="flex items-center justify-start">
             <button
               type="button"
