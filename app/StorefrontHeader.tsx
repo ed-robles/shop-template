@@ -147,8 +147,8 @@ export function StorefrontHeader({
       </div>
 
       <header className="bg-white">
-        <div className="mx-auto grid w-full max-w-none grid-cols-[1fr_auto_1fr] items-center px-2 py-3 sm:px-3">
-          <div className="flex items-center justify-start gap-2">
+        <div className="mx-auto grid w-full max-w-none grid-cols-[1fr_auto_1fr] items-center py-1 sm:px-3">
+          <div className="flex items-center justify-start">
             <button
               type="button"
               aria-label="Open navigation menu"
@@ -194,7 +194,7 @@ export function StorefrontHeader({
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.75"
-                className="h-6 w-6"
+                className="h-5 w-5"
               >
                 <path
                   strokeLinecap="round"
@@ -212,7 +212,7 @@ export function StorefrontHeader({
             Shop Template
           </Link>
 
-          <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center justify-end">
 
             <Link
               href="/account"
@@ -260,7 +260,7 @@ export function StorefrontHeader({
                 />
               </svg>
               {cart.itemCount > 0 ? (
-                <span className="absolute -right-1 -top-1 inline-flex min-w-5 items-center justify-center rounded-full bg-slate-900 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                <span className="absolute right-2.5 top-4 inline-flex min-w-5 items-center justify-center text-[10px] font-semibold">
                   {cart.itemCount}
                 </span>
               ) : null}
@@ -302,7 +302,7 @@ export function StorefrontHeader({
                 ref={searchInputRef}
                 id="storefront-search-input"
                 type="search"
-                placeholder="search"
+                placeholder="Search"
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
                 className="h-9 w-full bg-white text-sm text-slate-900 outline-none"
