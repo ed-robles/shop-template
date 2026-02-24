@@ -146,204 +146,205 @@ export function StorefrontHeader({
         </p>
       </div>
 
-      <header className="bg-white">
-        <div className="mx-auto grid w-full max-w-none grid-cols-[1fr_auto_1fr] items-center px-1 py-1 sm:px-3">
-          <div className="flex items-center justify-start">
-            <button
-              type="button"
-              aria-label="Open navigation menu"
-              aria-expanded={isMenuOpen}
-              aria-controls="storefront-sidebar"
-              onClick={() => {
-                closeCart();
-                setIsMenuOpen(true);
-              }}
-              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                className="h-6 w-6"
+      <div className="sticky top-0 z-40 bg-white">
+        <header className="bg-white">
+          <div className="mx-auto grid w-full max-w-none grid-cols-[1fr_auto_1fr] items-center px-1 py-1 sm:px-3">
+            <div className="flex items-center justify-start">
+              <button
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded={isMenuOpen}
+                aria-controls="storefront-sidebar"
+                onClick={() => {
+                  closeCart();
+                  setIsMenuOpen(true);
+                }}
+                className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
               >
-                <path strokeLinecap="round" d="M4.5 7.5h15" />
-                <path strokeLinecap="round" d="M4.5 12h15" />
-                <path strokeLinecap="round" d="M4.5 16.5h15" />
-              </svg>
-            </button>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  className="h-6 w-6"
+                >
+                  <path strokeLinecap="round" d="M4.5 7.5h15" />
+                  <path strokeLinecap="round" d="M4.5 12h15" />
+                  <path strokeLinecap="round" d="M4.5 16.5h15" />
+                </svg>
+              </button>
 
-            <button
-              type="button"
-              aria-label="Toggle product search"
-              aria-expanded={isSearchOpen}
-              aria-controls="storefront-product-search"
-              onClick={() => {
-                setIsSearchOpen((isOpen) => {
-                  const nextIsOpen = !isOpen;
-                  if (nextIsOpen) {
-                    focusSearchInput();
-                  }
-                  return nextIsOpen;
-                });
-              }}
-              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                className="h-5 w-5"
+              <button
+                type="button"
+                aria-label="Toggle product search"
+                aria-expanded={isSearchOpen}
+                aria-controls="storefront-product-search"
+                onClick={() => {
+                  setIsSearchOpen((isOpen) => {
+                    const nextIsOpen = !isOpen;
+                    if (nextIsOpen) {
+                      focusSearchInput();
+                    }
+                    return nextIsOpen;
+                  });
+                }}
+                className="inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <Link
-            href="/"
-            className="justify-self-center text-sm font-semibold uppercase tracking-[0.24em]"
-          >
-            Shop Template
-          </Link>
-
-          <div className="flex items-center justify-end">
-
-            <Link
-              href="/account"
-              aria-label="Open account page"
-              className="inline-flex h-10 w-10 items-center justify-center text-black"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.9"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"
-                />
-              </svg>
-            </Link>
-
-            <button
-              type="button"
-              aria-label="Open cart"
-              aria-expanded={isCartOpen}
-              aria-controls="storefront-cart-sidebar"
-              onClick={() => {
-                setIsMenuOpen(false);
-                clearError();
-                openCart();
-              }}
-              className="relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75M4.5 10.5h15l-1.5 9.75a2.25 2.25 0 0 1-2.227 1.905H8.227A2.25 2.25 0 0 1 6 20.25L4.5 10.5Z"
-                />
-              </svg>
-              {cart.itemCount > 0 ? (
-                <span className="absolute right-2.5 top-4 inline-flex min-w-5 items-center justify-center text-[10px] font-semibold">
-                  {cart.itemCount}
-                </span>
-              ) : null}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div
-        className={`overflow-hidden bg-white transition-[max-height,opacity] duration-300 ${
-          isSearchOpen ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="mx-auto w-full max-w-none px-2 py-2 sm:px-3">
-          <form
-            id="storefront-product-search"
-            onSubmit={handleSearchSubmit}
-            className="flex items-center gap-2"
-          >
-            <label htmlFor="storefront-search-input" className="sr-only">
-              Search products by name, category, or SKU
-            </label>
-            <div className="flex h-9 w-full items-center gap-2">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                aria-hidden="true"
-                className="h-3.5 w-3.5 text-black"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
-                />
-              </svg>
-              <input
-                ref={searchInputRef}
-                id="storefront-search-input"
-                type="search"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="h-9 w-full bg-white text-sm text-slate-900 outline-none"
-              />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                  />
+                </svg>
+              </button>
             </div>
-          </form>
-        </div>
-      </div>
 
-      {pathname === "/" ? (
-        <nav
-          aria-label="Product categories"
-          className="border-t-[0.5px] border-b-[0.5px] border-black bg-white"
-        >
-          <div className="mx-auto flex w-full max-w-none items-center gap-5 overflow-x-auto px-2 py-3 sm:px-3">
             <Link
               href="/"
-              className={`whitespace-nowrap text-xs font-semibold uppercase tracking-tight text-black ${
-                activeCategory === null
-                  ? "underline decoration-2 underline-offset-4"
-                  : "opacity-70 hover:opacity-100"
-              }`}
+              className="justify-self-center text-sm font-semibold uppercase tracking-[0.24em]"
             >
-              All
+              Shop Template
             </Link>
-            {PRODUCT_CATEGORIES.map((category) => (
+
+            <div className="flex items-center justify-end">
               <Link
-                key={category}
-                href={`/?category=${category.toLowerCase()}`}
+                href="/account"
+                aria-label="Open account page"
+                className="inline-flex h-10 w-10 items-center justify-center text-black"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.9"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"
+                  />
+                </svg>
+              </Link>
+
+              <button
+                type="button"
+                aria-label="Open cart"
+                aria-expanded={isCartOpen}
+                aria-controls="storefront-cart-sidebar"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  clearError();
+                  openCart();
+                }}
+                className="relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-black"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75M4.5 10.5h15l-1.5 9.75a2.25 2.25 0 0 1-2.227 1.905H8.227A2.25 2.25 0 0 1 6 20.25L4.5 10.5Z"
+                  />
+                </svg>
+                {cart.itemCount > 0 ? (
+                  <span className="absolute right-2.5 top-4 inline-flex min-w-5 items-center justify-center text-[10px] font-semibold">
+                    {cart.itemCount}
+                  </span>
+                ) : null}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div
+          className={`overflow-hidden bg-white transition-[max-height,opacity] duration-300 ${
+            isSearchOpen ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="mx-auto w-full max-w-none px-2 py-2 sm:px-3">
+            <form
+              id="storefront-product-search"
+              onSubmit={handleSearchSubmit}
+              className="flex items-center gap-2"
+            >
+              <label htmlFor="storefront-search-input" className="sr-only">
+                Search products by name, category, or SKU
+              </label>
+              <div className="flex h-9 w-full items-center gap-2">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  aria-hidden="true"
+                  className="h-3.5 w-3.5 text-black"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                  />
+                </svg>
+                <input
+                  ref={searchInputRef}
+                  id="storefront-search-input"
+                  type="search"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  className="h-9 w-full bg-white text-sm text-slate-900 outline-none"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {pathname === "/" ? (
+          <nav
+            aria-label="Product categories"
+            className="border-t-[0.5px] border-b-[0.5px] border-black bg-white"
+          >
+            <div className="mx-auto flex w-full max-w-none items-center gap-5 overflow-x-auto px-2 py-3 sm:px-3">
+              <Link
+                href="/"
                 className={`whitespace-nowrap text-xs font-semibold uppercase tracking-tight text-black ${
-                  activeCategory === category
+                  activeCategory === null
                     ? "underline decoration-2 underline-offset-4"
                     : "opacity-70 hover:opacity-100"
                 }`}
               >
-                {PRODUCT_CATEGORY_LABELS[category]}
+                All
               </Link>
-            ))}
-          </div>
-        </nav>
-      ) : null}
+              {PRODUCT_CATEGORIES.map((category) => (
+                <Link
+                  key={category}
+                  href={`/?category=${category.toLowerCase()}`}
+                  className={`whitespace-nowrap text-xs font-semibold uppercase tracking-tight text-black ${
+                    activeCategory === category
+                      ? "underline decoration-2 underline-offset-4"
+                      : "opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  {PRODUCT_CATEGORY_LABELS[category]}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        ) : null}
+      </div>
 
       <div
         className={`fixed inset-0 z-50 transition-opacity duration-300 ${
