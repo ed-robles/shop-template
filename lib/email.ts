@@ -84,15 +84,16 @@ export async function sendAdminOrderNotificationByResend(data: {
   const billingName = data.session.customer_details?.name || "Unknown";
   const billingEmail =
     data.session.customer_details?.email || data.session.customer_email || data.order.customerEmail || "Unknown";
-  const shippingName = data.session.shipping_details?.name || "Not provided";
-  const shippingAddress = data.session.shipping_details?.address
+  const shippingDetails = data.session.collected_information?.shipping_details;
+  const shippingName = shippingDetails?.name || "Not provided";
+  const shippingAddress = shippingDetails?.address
     ? [
-        data.session.shipping_details.address.line1,
-        data.session.shipping_details.address.line2,
-        data.session.shipping_details.address.city,
-        data.session.shipping_details.address.state,
-        data.session.shipping_details.address.postal_code,
-        data.session.shipping_details.address.country,
+        shippingDetails.address.line1,
+        shippingDetails.address.line2,
+        shippingDetails.address.city,
+        shippingDetails.address.state,
+        shippingDetails.address.postal_code,
+        shippingDetails.address.country,
       ]
         .filter(Boolean)
         .join(", ")
