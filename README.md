@@ -31,13 +31,13 @@ Fill in `.env` after copying from `.env.example`.
 | `GOOGLE_CLIENT_SECRET` | Optional | Secret for the Google OAuth app. Must be set together with `GOOGLE_CLIENT_ID`. |
 | `STRIPE_PUBLISHABLE_KEY` | Yes | Stripe publishable key used by the frontend checkout flow. |
 | `STRIPE_SECRET_KEY` | Yes | Stripe secret key used by server routes to create checkout sessions and process Stripe events. |
-| `RESEND_API_KEY` | Yes | API key for sending verification and password reset emails through Resend. |
+| `RESEND_API_KEY` | Yes | API key for sending auth emails and paid-order admin notifications through Resend. |
 | `EMAIL_FROM` | Yes | Sender address for auth emails (example: `noreply@yourdomain.com`). Should be from a verified Resend domain/sender. |
 | `AWS_ACCESS_KEY_ID` | Usually yes | AWS access key used by S3 uploads. Can be omitted if credentials are provided by IAM role/profile in your runtime environment. |
 | `AWS_SECRET_ACCESS_KEY` | Usually yes | AWS secret key paired with `AWS_ACCESS_KEY_ID`. Can be omitted when using IAM role/profile credentials. |
 | `AWS_REGION` | Yes | AWS region of your S3 bucket (example: `us-east-1`). |
 | `AWS_S3_BUCKET` | Yes | S3 bucket name used for product image uploads and deletions. |
-| `ADMIN_EMAILS` | Yes | Comma-separated email allowlist for `/admin` access (example: `owner@yourdomain.com,ops@yourdomain.com`). |
+| `ADMIN_EMAILS` | Yes | Comma-separated email list for `/admin` access and paid-order backup notifications (example: `owner@yourdomain.com,ops@yourdomain.com`). |
 | `AWS_CLOUDFRONT_URL` | Optional | CloudFront domain/base URL used to serve product images. If omitted, direct S3 URLs are used. |
 | `STRIPE_WEBHOOK_SECRET` | Yes | Stripe webhook signing secret (`whsec_...`) used to verify incoming webhook events at `/api/stripe/webhook`. |
 
@@ -67,6 +67,7 @@ npx prisma migrate dev
 
 - Create a Resend API key and put it in `RESEND_API_KEY`.
 - Verify your sender domain/address and set `EMAIL_FROM`.
+- `ADMIN_EMAILS` recipients receive paid-order backup notifications with order details.
 
 ### S3 / CloudFront (product images)
 
