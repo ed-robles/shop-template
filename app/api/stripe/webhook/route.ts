@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
+import { sendAdminOrderNotificationByResend } from "@/lib/email";
 import {
   constructVerifiedEvent,
   finalizePaidOrder,
@@ -35,6 +36,29 @@ function isCheckoutSession(object: Stripe.Event.Data.Object): object is Stripe.C
     "object" in object &&
     (object as { object?: string }).object === "checkout.session"
   );
+}
+
+
+async function sendAdminPaidOrderNotification(session: Stripe.Checkout.Session, lineItems: Stripe.LineItem[]) {
+  const finalizedResult = await finalizePaidOrder(session, lineItems);
+  if (!finalizedResult.markedPaid) {
+    return;
+  }
+
+  const orderWithItems = await prisma.order.findUniqueOrThrow({
+    where: { id: finalizedResult.order.id },
+    include: { items: true },
+  });
+
+  try {
+    await sendAdminOrderNotificationByResend({
+      order: orderWithItems,
+      session,
+      stripeLineItems: lineItems,
+    });
+  } catch (error) {
+    console.error("Failed to send admin order notification email", error);
+  }
 }
 
 export async function POST(request: Request) {
@@ -101,7 +125,7 @@ export async function POST(request: Request) {
         const lineItems = await listCheckoutSessionLineItems(sessionObject.id);
 
         if (sessionObject.payment_status === "paid") {
-          await finalizePaidOrder(sessionObject, lineItems);
+          await sendAdminPaidOrderNotification(sessionObject, lineItems);
         } else {
           await upsertOrderFromSession(sessionObject, lineItems);
         }
@@ -115,7 +139,7 @@ export async function POST(request: Request) {
         }
 
         const lineItems = await listCheckoutSessionLineItems(sessionObject.id);
-        await finalizePaidOrder(sessionObject, lineItems);
+        await sendAdminPaidOrderNotification(sessionObject, lineItems);
         break;
       }
       case "checkout.session.async_payment_failed": {

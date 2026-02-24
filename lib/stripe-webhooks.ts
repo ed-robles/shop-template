@@ -270,7 +270,10 @@ export async function finalizePaidOrder(
   const order = await upsertOrderFromSession(session, lineItems);
 
   if (order.status === OrderStatus.PAID || order.status === OrderStatus.STOCK_FAILED) {
-    return order;
+    return {
+      order,
+      markedPaid: false,
+    };
   }
 
   const normalizedLineItems = normalizeLineItems(lineItems);
@@ -278,7 +281,7 @@ export async function finalizePaidOrder(
   const customerEmail = resolveCustomerEmail(session);
 
   try {
-    return await prisma.$transaction(async (tx) => {
+    const finalizedOrder = await prisma.$transaction(async (tx) => {
       const existingOrder = await tx.order.findUnique({
         where: { id: order.id },
         select: {
@@ -411,12 +414,20 @@ export async function finalizePaidOrder(
         },
       });
     });
+
+    return {
+      order: finalizedOrder,
+      markedPaid: finalizedOrder.status === OrderStatus.PAID,
+    };
   } catch (error) {
     if (!(error instanceof StockFinalizationError)) {
       throw error;
     }
 
-    return markOrderAsStockFailed(order.id, session);
+    return {
+      order: await markOrderAsStockFailed(order.id, session),
+      markedPaid: false,
+    };
   }
 }
 
