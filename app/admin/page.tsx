@@ -24,7 +24,11 @@ export default function AdminPage() {
         <div className="max-w-3xl">
           <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
           <p className="mt-2 text-sm text-slate-600">
+<<<<<<< ours
             Select a module for more information.
+=======
+            Build each admin module one at a time.
+>>>>>>> theirs
           </p>
         </div>
 
